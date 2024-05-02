@@ -1,0 +1,70 @@
+@startuml
+
+/'SUBSYSTEMS'/
+component cob_gazebo {
+  component gazebo {
+
+/' PORTS DEFINED AS AVAILABLE IN THE ROSSYSTEM FILE '/
+
+/' PORTS FROM THE ORIGINAL NODE '/
+  }
+
+  component robot_state_publisher {
+
+/' PORTS DEFINED AS AVAILABLE IN THE ROSSYSTEM FILE '/
+    portin robot_state_publisher.joint_states as "joint_states" #blue
+    portout robot_state_publisher.tf as "tf" #blue
+    portout robot_state_publisher.tf_static as "tf_static" #blue
+
+/' PORTS FROM THE ORIGINAL NODE '/
+  }
+
+  component cob_joint_state {
+
+/' PORTS DEFINED AS AVAILABLE IN THE ROSSYSTEM FILE '/
+    portout cob_joint_state.joint_states as "joint_states" #blue
+
+/' PORTS FROM THE ORIGINAL NODE '/
+  }
+
+ }
+
+  component joy_node {
+
+/' PORTS DEFINED AS AVAILABLE IN THE ROSSYSTEM FILE '/
+    portout joy_node.joy_pub as "joy_pub" #blue
+
+/' PORTS FROM THE ORIGINAL NODE '/
+  }
+
+  component teleop_twist_joy_node {
+
+/' PORTS DEFINED AS AVAILABLE IN THE ROSSYSTEM FILE '/
+    portin teleop_twist_joy_node.joy_sub as "joy_sub" #blue
+    portout teleop_twist_joy_node.cmd_vel_pub as "cmd_vel_pub" #blue
+
+/' PORTS FROM THE ORIGINAL NODE '/
+  }
+
+  component twist_mux {
+
+/' PORTS DEFINED AS AVAILABLE IN THE ROSSYSTEM FILE '/
+    portin twist_mux.cmd_vel_sub as "cmd_vel_sub" #blue
+    portout twist_mux.cmd_vel_out_pub as "cmd_vel_out_pub" #blue
+
+/' PORTS FROM THE ORIGINAL NODE '/
+  }
+
+  component cmd_vel_bridge_node {
+
+/' PORTS DEFINED AS AVAILABLE IN THE ROSSYSTEM FILE '/
+    portin cmd_vel_bridge_node.cmd_vel_out_sub as "cmd_vel_out_sub" #blue
+
+/' PORTS FROM THE ORIGINAL NODE '/
+  }
+
+  joy_node.joy_pub --> teleop_twist_joy_node.joy_sub
+  teleop_twist_joy_node.cmd_vel_pub --> twist_mux.cmd_vel_sub
+  twist_mux.cmd_vel_out_pub --> cmd_vel_bridge_node.cmd_vel_out_sub
+
+@enduml
